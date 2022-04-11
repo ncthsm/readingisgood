@@ -1,4 +1,4 @@
-package com.readingisgood.bookordermanagement.impl;
+package com.readingisgood.bookordermanagement.service.impl;
 
 import com.readingisgood.bookordermanagement.controller.request.AddBookRequest;
 import com.readingisgood.bookordermanagement.controller.request.UpdateBookAmountRequest;
@@ -7,12 +7,12 @@ import com.readingisgood.bookordermanagement.dto.BookDTO;
 import com.readingisgood.bookordermanagement.model.Book;
 import com.readingisgood.bookordermanagement.repository.BookRepository;
 import com.readingisgood.bookordermanagement.service.SequenceGeneratorService;
-import com.readingisgood.bookordermanagement.service.impl.BookServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.Instant;

@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
                 return null;
             }else{
                int index = dbInBasketOrder.getOrderItems().indexOf(orderItems.get(0));
-               dbInBasketOrder.getOrderItems().get(index).setQuantity(index);
+               dbInBasketOrder.getOrderItems().get(index).setQuantity(updatedQuantity);
                 log.info("Update basket for quantity OrderItem={}, OrderId={}",requestOrderItem,
                         dbInBasketOrder.getId());
                orderRepository.save(dbInBasketOrder);

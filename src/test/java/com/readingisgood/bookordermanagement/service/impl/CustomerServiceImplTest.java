@@ -1,4 +1,4 @@
-package com.readingisgood.bookordermanagement.impl;
+package com.readingisgood.bookordermanagement.service.impl;
 
 import com.readingisgood.bookordermanagement.controller.request.CreateCustomerRequest;
 import com.readingisgood.bookordermanagement.dto.CustomerDTO;
@@ -6,7 +6,6 @@ import com.readingisgood.bookordermanagement.model.Customer;
 import com.readingisgood.bookordermanagement.repository.CustomerRepository;
 import com.readingisgood.bookordermanagement.service.OrderService;
 import com.readingisgood.bookordermanagement.service.SequenceGeneratorService;
-import com.readingisgood.bookordermanagement.service.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,8 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 class CustomerServiceImplTest {
@@ -89,6 +87,5 @@ class CustomerServiceImplTest {
 
 
     }
-
 
 }
