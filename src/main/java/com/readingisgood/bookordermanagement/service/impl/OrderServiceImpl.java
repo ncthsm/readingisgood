@@ -135,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        if (bookList.size() < order.getOrderItems().size()) {
+        if (bookList.size() < order.getOrderItems().size() || bookList.isEmpty()) {
             log.error("Order is not created due to lack of requested books");
             return null;
         }
@@ -150,10 +150,20 @@ public class OrderServiceImpl implements OrderService {
         Integer totalBooks = orderMap.values().stream()
                 .reduce(0, Integer::sum);
 
+        if(totalAmount<1 || totalBooks<1){
+            log.error("Order is not created ,totalAmount={},totalBooks",totalAmount,totalBooks);
+            return null;
+        }
+
         order.setOrderStatus(OrderStatus.DONE);
         order.setTotalAmount(totalAmount);
         order.setTotalQuantity(totalBooks);
         order.setDoneDate(LocalDateTime.now());
+
+
+
+        bookList.forEach(book -> book.setStock(book.getStock() - orderMap.get(book.getId())));
+        bookService.saveBooks(bookList);
 
         orderRepository.save(order);
 

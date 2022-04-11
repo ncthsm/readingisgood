@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -133,4 +134,13 @@ public class BookServiceImpl implements BookService {
         return bookOpt.get();
 
     }
+
+    @Override
+    public void saveBooks(List<Book> bookList) {
+        for (Book book : bookList) {
+            bookRepository.save(book);
+        }
+    }
+
+
 }

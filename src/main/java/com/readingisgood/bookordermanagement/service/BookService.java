@@ -6,6 +6,8 @@ import com.readingisgood.bookordermanagement.controller.request.UpdateBookStockR
 import com.readingisgood.bookordermanagement.dto.BookDTO;
 import com.readingisgood.bookordermanagement.model.Book;
 
+import java.util.List;
+
 public interface BookService {
 
     public BookDTO addBook(AddBookRequest addBookRequest);
@@ -15,5 +17,6 @@ public interface BookService {
     public boolean getBooks();
     public Book findBookById(Long bookId);
     public Book getBookFromStock(Long bookId, int stock);
+    public void saveBooks(List<Book> bookList);
 
 }

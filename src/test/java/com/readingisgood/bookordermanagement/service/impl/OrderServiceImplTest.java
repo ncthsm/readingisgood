@@ -111,6 +111,8 @@ class OrderServiceImplTest {
         assertEquals(orderIte2.getQuantity(),orderDTO.getOrderItems().get(0).getQuantity());
     }
 
+
+
     @Test
     void addItemToBasket_notHaveStock() {
 
@@ -130,10 +132,32 @@ class OrderServiceImplTest {
 
     @Test
     void deleteBasket() {
+
+        Customer customer = Customer.builder().id(5L).build();
+        Book book = Book.builder().id(5L).stock(2).build();
+
+        OrderItem orderItem = new OrderItem(5L,4);
+
+        Mockito.when(customerService.findCustomerById(Mockito.any(Long.class))).thenReturn(customer);
+        Mockito.when(bookService.findBookById(Mockito.any(Long.class))).thenReturn(book);
+        AddItemToBasketRequest addItemToBasketRequest = new AddItemToBasketRequest(5L,orderItem);
+        boolean retVal = orderService.deleteBasket(5L);
+
+        assertEquals(false,retVal);
     }
 
     @Test
     void confirmBasket() {
+
+        OrderItem orderItem = new OrderItem(5L,4);
+        Order dbOrder =Order.builder().orderStatus(OrderStatus.BASKET).id(5L).build();
+        dbOrder.getOrderItems().add(orderItem);
+
+        Mockito.when(orderRepository.getOrderByOrderStatusAndCustomerId(
+                Mockito.any(OrderStatus.class),Mockito.any(Long.class))).thenReturn(Optional.of(dbOrder));
+
+        orderService.confirmBasket(5L);
+
     }
 
     @Test
@@ -146,6 +170,11 @@ class OrderServiceImplTest {
 
     @Test
     void getOrderById() {
+
+        OrderItem orderItem = new OrderItem(5L,4);
+       // Mockito.when(orderRepository.getOrderByOrderStatusAndCustomerId()
+
+
     }
 
     @Test
