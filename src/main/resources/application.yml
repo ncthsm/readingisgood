@@ -1,0 +1,17 @@
+server:
+  port: 8092
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  data:
+    mongodb:
+      database: readingisgood
+      uri: mongodb://127.0.0.1:27017
+      auto-index-creation: true
+      autoconfigure:
+        exclude: org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+
+jwt:
+  secret: 124WVWKNV09EGJEVNME09GJN0VJ0EVNE0VEVJM0HEW8RFNV938FVN3JVE30VJRVN
