@@ -12,7 +12,7 @@ services:
     networks:
       - my_network
   bookordermanagement:
-    container_name: apihost
+    container_name: bookordermanagement
     image: "bookordermanagement"
     build: ./
     depends_on:

@@ -207,11 +207,6 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    @Override
-    public List<OrderDTO> getOrdersByCustomerId(String customerId, Pageable pageable) {
-        return null;
-    }
-
     public List<OrderDTO> getCustomerDoneOrders(Long customerId, Pageable pageable){
 
         if(customerService.findCustomerById(customerId) == null){

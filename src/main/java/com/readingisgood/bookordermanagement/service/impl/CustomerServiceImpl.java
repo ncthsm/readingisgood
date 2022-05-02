@@ -21,7 +21,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final SequenceGeneratorService sequenceGeneratorService;
-   // private final OrderService orderService;
 
     @Override
     public CustomerDTO createCustomer(CreateCustomerRequest createCustomerRequest){

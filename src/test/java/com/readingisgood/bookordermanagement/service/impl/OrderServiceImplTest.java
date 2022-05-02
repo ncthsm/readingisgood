@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.internal.matchers.Any;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -235,12 +235,34 @@ class OrderServiceImplTest {
     }
 
 
-
-    @Test
-    void getOrdersByCustomerId() {
-    }
-
     @Test
     void getCustomerDoneOrders() {
+
+        Long customerId = 1L;
+        Customer customer = Customer.builder().id(5L).build();
+
+        OrderItem bookOrder1 = new OrderItem(1l, 1);
+        OrderItem bookOrder2 = new OrderItem(2l, 2);
+        final List<OrderItem>  orderItemList= Arrays.asList(bookOrder1, bookOrder2);
+
+        Order order = Order.builder().orderItems(orderItemList).orderStatus(OrderStatus.DONE).
+                totalAmount(100.0).customerId(1L).id(5l).build();
+
+        OrderDTO orderDTO = OrderDTO.fromOrder(order);
+        List<OrderDTO> orderDTOList = Arrays.asList(orderDTO);
+
+        List<Order> orderList = Arrays.asList(order);
+        Page<Order> orderPage = new PageImpl<Order>(orderList);
+
+        when(customerService.findCustomerById(customerId)).thenReturn(customer);
+        when(orderRepository.getOrderByOrderStatusAndCustomerId(OrderStatus.DONE, customerId,Pageable.unpaged())).
+                thenReturn(orderPage);
+
+
+        List<OrderDTO> orderDTOs = orderService.getCustomerDoneOrders(customerId,Pageable.unpaged());
+
+        assertNotNull(orderDTOs);
+        assertEquals(order.getOrderItems().get(0).getBookId(),orderDTOs.get(0).getOrderItems().get(0).getBookId());
+        assertEquals(OrderStatus.DONE,orderDTOs.get(0).getOrderStatus());
     }
 }

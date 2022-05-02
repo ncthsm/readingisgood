@@ -14,6 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.Instant;
@@ -199,5 +202,14 @@ class BookServiceImplTest {
     }
 
 
+    @Test
+    void getBooks() {
 
+        Book book = Book.builder().bookName("necati").id(5L).stock(100).author("HAsim").build();
+        List<Book> bookList = Arrays.asList(book);
+        Page<Book> books = new PageImpl<Book>(bookList);
+        when(bookRepository.findAll(Pageable.ofSize(5))).thenReturn(books);
+        List<BookDTO> bookPage = bookService.getBooks(Pageable.ofSize(5));
+        assertNotNull(bookPage);
+    }
 }

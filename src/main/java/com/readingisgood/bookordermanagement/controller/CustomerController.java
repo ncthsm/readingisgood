@@ -37,7 +37,6 @@ public class CustomerController {
     @GetMapping("/{id}/orders")
     public ResponseEntity<List<OrderDTO>> getCustomerOrders(@PathVariable Long id,
                                                             @PageableDefault(size = 20) Pageable pageable) {
-
         try {
             List<OrderDTO> orderDTOs = orderService.getCustomerDoneOrders(id, pageable);
 

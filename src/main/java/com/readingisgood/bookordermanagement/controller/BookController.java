@@ -4,10 +4,16 @@ import com.readingisgood.bookordermanagement.controller.request.AddBookRequest;
 import com.readingisgood.bookordermanagement.controller.request.UpdateBookAmountRequest;
 import com.readingisgood.bookordermanagement.controller.request.UpdateBookStockRequest;
 import com.readingisgood.bookordermanagement.dto.BookDTO;
+import com.readingisgood.bookordermanagement.model.Book;
 import com.readingisgood.bookordermanagement.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/book")
@@ -41,10 +47,14 @@ public class BookController {
     }
 
     @Operation(summary = "List book from stock with paging")
-    @GetMapping(value = "/listBooks")
-    private boolean listBooks(){
-        bookService.getBooks();
-        return true;
+    @PostMapping(value = "/listBooks")
+    private ResponseEntity<List<BookDTO>> listBooks(@RequestBody Pageable pageable){
+        List<BookDTO> bookDTOList = bookService.getBooks(pageable);
+        if(bookDTOList == null || bookDTOList.isEmpty()){
+           return new ResponseEntity<List<BookDTO>>(HttpStatus.NOT_FOUND);
+        }else{
+            return new ResponseEntity<List<BookDTO>>(bookDTOList,HttpStatus.OK);
+        }
     }
 
 

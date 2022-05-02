@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -107,12 +108,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public boolean getBooks() {
-
-        Pageable.ofSize(5);
-        Page<Book> bookPage = bookRepository.findAll(Pageable.ofSize(5));
-
-        return false;
+    public List<BookDTO> getBooks(Pageable pageable) {
+        Page<Book> bookPage = bookRepository.findAll(pageable);
+        return bookPage.toList().stream().map(book-> BookDTO.fromBook(book)).collect(Collectors.toList());
     }
 
     @Override

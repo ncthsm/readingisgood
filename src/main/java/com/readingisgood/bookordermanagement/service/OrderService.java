@@ -17,7 +17,6 @@ public interface OrderService {
     Page<Order> getOrderDoneStatusAndCustomerId(Long customerId, Pageable page);
     OrderDTO getOrderById(Long orderId);
     List<OrderDTO> getOrdersByDate(LocalDateTime startDate, LocalDateTime endDate,Pageable pageable);
-    List<OrderDTO> getOrdersByCustomerId(String customerId, Pageable pageable);
     List<OrderDTO> getCustomerDoneOrders(Long customerId, Pageable pageable);
     OrderDTO confirmBasket(Long customerId);
     boolean deleteBasket(Long customerId);
