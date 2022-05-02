@@ -13,6 +13,6 @@ public interface OrderRepository extends MongoRepository<Order,Long> {
 
     Page<Order> getOrderByOrderStatusAndCustomerId(OrderStatus orderStatus, Long customerId, Pageable pageable);
     Optional<Order> getOrderByOrderStatusAndCustomerId(OrderStatus orderStatus,Long CustomerId);
-    Page<Order> findByDoneDateBetween(LocalDateTime startDate, LocalDateTime endDate,Pageable pageable);
+    Page<Order> findByDoneDateBetweenAndOrderStatus(LocalDateTime startDate, LocalDateTime endDate,Pageable pageable,OrderStatus orderStatus);
 
 }

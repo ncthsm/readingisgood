@@ -160,8 +160,6 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalQuantity(totalBooks);
         order.setDoneDate(LocalDateTime.now());
 
-
-
         bookList.forEach(book -> book.setStock(book.getStock() - orderMap.get(book.getId())));
         bookService.saveBooks(bookList);
 
@@ -200,7 +198,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDTO> getOrdersByDate(LocalDateTime startDate, LocalDateTime endDate,Pageable pageable) {
 
-        Page<Order> orders = orderRepository.findByDoneDateBetween(startDate, endDate,pageable);
+        Page<Order> orders = orderRepository.findByDoneDateBetweenAndOrderStatus(startDate, endDate,pageable,OrderStatus.DONE);
         List<Order> customerOrders = orders.getContent();
 
         return customerOrders.stream()
@@ -217,6 +215,7 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDTO> getCustomerDoneOrders(Long customerId, Pageable pageable){
 
         if(customerService.findCustomerById(customerId) == null){
+            log.info("Customer Not Found");
             return null;
         }
 

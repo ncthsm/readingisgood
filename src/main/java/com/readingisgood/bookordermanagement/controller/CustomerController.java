@@ -11,13 +11,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@RequestMapping(value = "/api/customer")
+@RequestMapping(value = "/api/customer", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -25,7 +27,7 @@ public class CustomerController {
     private final OrderService orderService;
 
     @Operation(summary = "Create a customer")
-    @PostMapping(value = "createCustomer")
+    @PostMapping(value = "/createCustomer",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CreateCustomerRequest createCustomerRequest){
         CustomerDTO customerDTO =  customerService.createCustomer(createCustomerRequest);
         return new ResponseEntity<CustomerDTO>(customerDTO, HttpStatus.OK);
@@ -50,14 +52,15 @@ public class CustomerController {
     }
 
     @Operation(summary = "Get a customer By Id")
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) {
 
         Customer customer = customerService.findCustomerById(id);
         if(customer == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(CustomerDTO.fromCustomer(customer),HttpStatus.OK);
+        CustomerDTO customerDTO =  CustomerDTO.fromCustomer(customer);
+        return new ResponseEntity<>(customerDTO,HttpStatus.OK);
 
     }
 

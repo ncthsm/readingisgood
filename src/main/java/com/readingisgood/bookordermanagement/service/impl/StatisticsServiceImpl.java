@@ -38,7 +38,6 @@ public class StatisticsServiceImpl implements StatisticsService {
         double totalPurchasedAmount = 0;
 
         for (OrderDTO order : orderList) {
-
             totalBookCount += order.getTotalQuantity();
             totalPurchasedAmount += order.getTotalAmount();
         }

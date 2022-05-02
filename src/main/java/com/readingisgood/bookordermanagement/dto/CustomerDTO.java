@@ -3,10 +3,13 @@ package com.readingisgood.bookordermanagement.dto;
 import com.readingisgood.bookordermanagement.model.Customer;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class CustomerDTO {
 

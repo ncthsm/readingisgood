@@ -1,13 +1,5 @@
-FROM openjdk:11-jre-alpine
-
-MAINTAINER readingisgood
-
-USER root
-
-ADD target/bookordermanagement-0.0.1.jar .
-
-EXPOSE 8092
-
-ENV JAVA_OPTS="-Xms256m -Xmx512m"
-
-ENTRYPOINT ["java","-jar", "bookordermanagement-0.0.1.jar"]
+FROM adoptopenjdk/openjdk11:alpine-jre
+EXPOSE 8080
+ARG JAR_FILE=target/bookordermanagement-0.0.1.jar
+ADD ${JAR_FILE} bookordermanagement.jar
+ENTRYPOINT ["java","-Dspring.data.mongodb.uri=mongodb://mongo:27017/name_of_your_db", "-Djava.security.egd=file:/dev/./urandom","-jar","/bookordermanagement.jar"]

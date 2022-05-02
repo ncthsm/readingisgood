@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - 'mongo_db_command:/data/db'
+    networks:
+      - my_network
+  bookordermanagement:
+    container_name: apihost
+    image: "bookordermanagement"
+    build: ./
+    depends_on:
+      - mongodb
+    networks:
+      - my_network
+    ports:
+      - "8092:8092"
+volumes: 
+  mongo_db_command:
+    driver: local 
+
+networks:
+  my_network:
+    driver: bridge
