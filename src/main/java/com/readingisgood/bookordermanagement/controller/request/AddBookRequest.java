@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class AddBookRequest {
 
     @NotNull

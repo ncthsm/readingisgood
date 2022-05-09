@@ -4,7 +4,6 @@ import com.readingisgood.bookordermanagement.controller.request.AddBookRequest;
 import com.readingisgood.bookordermanagement.controller.request.UpdateBookAmountRequest;
 import com.readingisgood.bookordermanagement.controller.request.UpdateBookStockRequest;
 import com.readingisgood.bookordermanagement.dto.BookDTO;
-import com.readingisgood.bookordermanagement.model.Book;
 import com.readingisgood.bookordermanagement.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +21,15 @@ public class BookController {
 
     private final BookService bookService;
 
-    @Operation(summary = "Add Book")
+    @Operation(summary = "Add BookStock")
     @PostMapping(value = "/addBook")
-    private BookDTO addBook(@RequestBody AddBookRequest addBookRequest){
-        return bookService.addBook(addBookRequest);
+    private ResponseEntity<BookDTO>  addBook(@RequestBody AddBookRequest addBookRequest){
+        BookDTO bookDTO =  bookService.addBook(addBookRequest);
+        if(bookDTO == null){
+            return new ResponseEntity<BookDTO>(HttpStatus.NOT_ACCEPTABLE);
+        }else{
+            return new ResponseEntity<BookDTO>(bookDTO,HttpStatus.OK);
+        }
     }
 
     @Operation(summary = "Delete book from stock")

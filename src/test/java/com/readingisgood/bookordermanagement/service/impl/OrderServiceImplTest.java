@@ -2,7 +2,7 @@ package com.readingisgood.bookordermanagement.service.impl;
 
 import com.readingisgood.bookordermanagement.controller.request.AddItemToBasketRequest;
 import com.readingisgood.bookordermanagement.dto.OrderDTO;
-import com.readingisgood.bookordermanagement.model.Book;
+import com.readingisgood.bookordermanagement.model.BookStock;
 import com.readingisgood.bookordermanagement.model.Customer;
 import com.readingisgood.bookordermanagement.model.Order;
 import com.readingisgood.bookordermanagement.model.OrderItem;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.internal.matchers.Any;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -54,12 +53,12 @@ class OrderServiceImplTest {
     void addItemToBasket_createNew(){
 
         Customer customer = Customer.builder().id(5L).build();
-        Book book = Book.builder().id(5L).stock(2).build();
+        BookStock bookStock = BookStock.builder().id(5L).stock(2).build();
 
         OrderItem orderItem = new OrderItem(5L,1);
 
         Mockito.when(customerService.findCustomerById(Mockito.any(Long.class))).thenReturn(customer);
-        Mockito.when(bookService.findBookById(Mockito.any(Long.class))).thenReturn(book);
+        Mockito.when(bookService.findBookById(Mockito.any(Long.class))).thenReturn(bookStock);
         AddItemToBasketRequest addItemToBasketRequest = new AddItemToBasketRequest(5L,orderItem);
         OrderDTO orderDTO = orderService.addItemToBasket(addItemToBasketRequest);
 
@@ -71,7 +70,7 @@ class OrderServiceImplTest {
     void addItemToBasket_existBasket(){
 
         Customer customer = Customer.builder().id(5L).build();
-        Book book = Book.builder().id(5L).stock(10).build();
+        BookStock bookStock = BookStock.builder().id(5L).stock(10).build();
 
         Order dbOrder =Order.builder().orderStatus(OrderStatus.BASKET).id(5L).build();
 
@@ -82,7 +81,7 @@ class OrderServiceImplTest {
         dbOrder.getOrderItems().add(orderIte2);
 
         Mockito.when(customerService.findCustomerById(Mockito.any(Long.class))).thenReturn(customer);
-        Mockito.when(bookService.findBookById(Mockito.any(Long.class))).thenReturn(book);
+        Mockito.when(bookService.findBookById(Mockito.any(Long.class))).thenReturn(bookStock);
         Mockito.when(orderRepository.getOrderByOrderStatusAndCustomerId(
                 Mockito.any(OrderStatus.class),Mockito.any(Long.class))).thenReturn(Optional.of(dbOrder));
 
@@ -97,7 +96,7 @@ class OrderServiceImplTest {
     void addItemToBasket_existBasketDifferentBook(){
 
         Customer customer = Customer.builder().id(5L).build();
-        Book book = Book.builder().id(5L).stock(10).build();
+        BookStock bookStock = BookStock.builder().id(5L).stock(10).build();
 
         Order dbOrder =Order.builder().orderStatus(OrderStatus.BASKET).id(5L).build();
 
@@ -108,7 +107,7 @@ class OrderServiceImplTest {
         dbOrder.getOrderItems().add(orderIte2);
 
         Mockito.when(customerService.findCustomerById(Mockito.any(Long.class))).thenReturn(customer);
-        Mockito.when(bookService.findBookById(Mockito.any(Long.class))).thenReturn(book);
+        Mockito.when(bookService.findBookById(Mockito.any(Long.class))).thenReturn(bookStock);
         Mockito.when(orderRepository.getOrderByOrderStatusAndCustomerId(
                 Mockito.any(OrderStatus.class),Mockito.any(Long.class))).thenReturn(Optional.of(dbOrder));
 
@@ -125,12 +124,12 @@ class OrderServiceImplTest {
     void addItemToBasket_notHaveStock() {
 
         Customer customer = Customer.builder().id(5L).build();
-        Book book = Book.builder().id(5L).stock(2).build();
+        BookStock bookStock = BookStock.builder().id(5L).stock(2).build();
 
         OrderItem orderItem = new OrderItem(5L,4);
 
         Mockito.when(customerService.findCustomerById(Mockito.any(Long.class))).thenReturn(customer);
-        Mockito.when(bookService.findBookById(Mockito.any(Long.class))).thenReturn(book);
+        Mockito.when(bookService.findBookById(Mockito.any(Long.class))).thenReturn(bookStock);
         AddItemToBasketRequest addItemToBasketRequest = new AddItemToBasketRequest(5L,orderItem);
         OrderDTO orderDTO = orderService.addItemToBasket(addItemToBasketRequest);
 
@@ -142,12 +141,12 @@ class OrderServiceImplTest {
     void deleteBasket() {
 
         Customer customer = Customer.builder().id(5L).build();
-        Book book = Book.builder().id(5L).stock(2).build();
+        BookStock bookStock = BookStock.builder().id(5L).stock(2).build();
 
         OrderItem orderItem = new OrderItem(5L,4);
 
         Mockito.when(customerService.findCustomerById(Mockito.any(Long.class))).thenReturn(customer);
-        Mockito.when(bookService.findBookById(Mockito.any(Long.class))).thenReturn(book);
+        Mockito.when(bookService.findBookById(Mockito.any(Long.class))).thenReturn(bookStock);
         AddItemToBasketRequest addItemToBasketRequest = new AddItemToBasketRequest(5L,orderItem);
         boolean retVal = orderService.deleteBasket(5L);
 
@@ -161,10 +160,10 @@ class OrderServiceImplTest {
         Order dbOrder =Order.builder().orderStatus(OrderStatus.BASKET).id(5L).build();
         dbOrder.getOrderItems().add(orderItem);
 
-        Book book = Book.builder().stock(10).amount(10.0).id(5L).bookName("Savaş ve Barış").build();
+        BookStock bookStock = BookStock.builder().stock(10).amount(10.0).id(5L).bookName("Savaş ve Barış").build();
 
         Mockito.when(bookService.getBookFromStock(Mockito.any(Long.class),Mockito.any(Integer.class))).
-                thenReturn(book);
+                thenReturn(bookStock);
         Mockito.when(orderRepository.getOrderByOrderStatusAndCustomerId(
                 Mockito.any(OrderStatus.class),Mockito.any(Long.class))).thenReturn(Optional.of(dbOrder));
 

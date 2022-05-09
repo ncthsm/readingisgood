@@ -1,15 +1,16 @@
 package com.readingisgood.bookordermanagement.repository;
 
-import com.readingisgood.bookordermanagement.model.Book;
+import com.readingisgood.bookordermanagement.model.BookStock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface BookRepository extends MongoRepository<Book,Long> {
+public interface BookRepository extends MongoRepository<BookStock,Long> {
 
-    Page<Book> findAll(Pageable pageable);
-    Optional<Book> findByAuthorAndPublisherAndBookName(String author,String publisher,String bookName);
+    Page<BookStock> findAll(Pageable pageable);
+    Optional<BookStock> findByAuthorAndPublisherAndBookName(String author, String publisher, String bookName);
+    Optional<BookStock> findByBookName(String bookName);
 
 }

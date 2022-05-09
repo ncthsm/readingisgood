@@ -29,10 +29,17 @@ vision operations.
 -JUnit 
 
 -------------------------------------
+### Run Steps
+```
+mvn clean install
+docker-compose up 
+```
+-------------------------------------
+
 ## Controllers
 * AuthenticationController (Create Bearer token)
 * CustomerController (Create new customer, Query customer's orders)
-* BookController (Create new book, Update book stock)
+* BookController (Create new bookStock, Update bookStock stock)
 * OrderController (Create new Order, Query order detail, Query orders by date interval)
 * StaticsController (Query customer's monthly statics data)
 
@@ -62,7 +69,7 @@ curl --location --request POST 'http://localhost:8092/authenticate' \
 
 #### **Postman Collection Directory**
 
-reading-is-good\postman-collection
+bookordermanagement.postman_collection.json
 
 -------------------------------------
 

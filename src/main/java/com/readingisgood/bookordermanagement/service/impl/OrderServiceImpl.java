@@ -2,7 +2,7 @@ package com.readingisgood.bookordermanagement.service.impl;
 
 import com.readingisgood.bookordermanagement.controller.request.AddItemToBasketRequest;
 import com.readingisgood.bookordermanagement.dto.OrderDTO;
-import com.readingisgood.bookordermanagement.model.Book;
+import com.readingisgood.bookordermanagement.model.BookStock;
 import com.readingisgood.bookordermanagement.model.Customer;
 import com.readingisgood.bookordermanagement.model.Order;
 import com.readingisgood.bookordermanagement.model.OrderItem;
@@ -44,23 +44,23 @@ public class OrderServiceImpl implements OrderService {
             return null;
         }
 
-        Book book = bookService.findBookById(addItemToBasketRequest.getOrderItem().getBookId());
+        BookStock bookStock = bookService.findBookById(addItemToBasketRequest.getOrderItem().getBookId());
 
-        if(book == null){
-            log.info("Book not found by id ={}",addItemToBasketRequest.getOrderItem().getBookId());
+        if(bookStock == null){
+            log.info("BookStock not found by id ={}",addItemToBasketRequest.getOrderItem().getBookId());
             return null;
         }
 
-        if(addItemToBasketRequest.getOrderItem().getQuantity()>book.getStock()){
-            log.info("Book stock not enough for quantity ,bookId={},stock={} quantity={}",
-                    book.getId(),book.getStock(),book.getId());
+        if(addItemToBasketRequest.getOrderItem().getQuantity()> bookStock.getStock()){
+            log.info("BookStock stock not enough for quantity ,bookId={},stock={} quantity={}",
+                    bookStock.getId(), bookStock.getStock(), bookStock.getId());
             return null;
         }
 
         Optional<Order> dbInBasketOrderOptional = orderRepository.getOrderByOrderStatusAndCustomerId(OrderStatus.BASKET, customer.getId());
 
         if(dbInBasketOrderOptional.isPresent()){
-          return  this.updateBasket(dbInBasketOrderOptional.get(),addItemToBasketRequest.getOrderItem(),book.getStock());
+          return  this.updateBasket(dbInBasketOrderOptional.get(),addItemToBasketRequest.getOrderItem(), bookStock.getStock());
         }else{
            return this.createBasket(addItemToBasketRequest.getOrderItem());
         }
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
         if(orderItems != null && orderItems.size()>0){
             int updatedQuantity  = orderItems.get(0).getQuantity() + requestOrderItem.getQuantity();
             if(updatedQuantity>stockCount){
-                log.info("Book stock not enough for quantity ,bookId={},stock={} quantity={}",
+                log.info("BookStock stock not enough for quantity ,bookId={},stock={} quantity={}",
                         requestOrderItem.getBookId(),stockCount,updatedQuantity);
                 return null;
             }else{
@@ -130,12 +130,12 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = basketOrder.get();
 
-        List<Book> bookList = order.getOrderItems().stream()
+        List<BookStock> bookStockList = order.getOrderItems().stream()
                 .map(bookOrder -> bookService.getBookFromStock(bookOrder.getBookId(), bookOrder.getQuantity()))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        if (bookList.size() < order.getOrderItems().size() || bookList.isEmpty()) {
+        if (bookStockList.size() < order.getOrderItems().size() || bookStockList.isEmpty()) {
             log.error("Order is not created due to lack of requested books");
             return null;
         }
@@ -143,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
         Map<Long,Integer > orderMap =order.getOrderItems().stream()
                 .collect(Collectors.toMap(OrderItem::getBookId,OrderItem::getQuantity));
 
-        Double totalAmount = bookList.stream()
+        Double totalAmount = bookStockList.stream()
                 .map(book -> orderMap.get(book.getId()) * book.getAmount())
                 .reduce(0.0, Double::sum);
 
@@ -160,12 +160,12 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalQuantity(totalBooks);
         order.setDoneDate(LocalDateTime.now());
 
-        bookList.forEach(book -> book.setStock(book.getStock() - orderMap.get(book.getId())));
-        bookService.saveBooks(bookList);
+        bookStockList.forEach(book -> book.setStock(book.getStock() - orderMap.get(book.getId())));
+        bookService.saveBooks(bookStockList);
 
         orderRepository.save(order);
 
-        log.info("Order is successfully , customerId={} books={},orderId={}", customerId, bookList,order.getId());
+        log.info("Order is successfully , customerId={} books={},orderId={}", customerId, bookStockList,order.getId());
 
         return OrderDTO.fromOrder(order);
 

@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Builder
-public class Book {
+public class BookStock {
 
     @Id
     private Long id;

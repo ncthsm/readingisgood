@@ -30,6 +30,9 @@ public class CustomerController {
     @PostMapping(value = "/createCustomer",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CreateCustomerRequest createCustomerRequest){
         CustomerDTO customerDTO =  customerService.createCustomer(createCustomerRequest);
+        if(customerDTO == null){
+            return new ResponseEntity<CustomerDTO>(HttpStatus.FOUND);
+        }
         return new ResponseEntity<CustomerDTO>(customerDTO, HttpStatus.OK);
     }
 

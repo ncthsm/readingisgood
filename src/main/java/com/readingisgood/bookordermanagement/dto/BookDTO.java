@@ -1,6 +1,6 @@
 package com.readingisgood.bookordermanagement.dto;
 
-import com.readingisgood.bookordermanagement.model.Book;
+import com.readingisgood.bookordermanagement.model.BookStock;
 import lombok.Builder;
 import lombok.Data;
 
@@ -26,11 +26,11 @@ public class BookDTO {
 
     private Long bookId;
 
-    public static BookDTO fromBook(Book book){
-        return  BookDTO.builder().bookId(book.getId()).bookName(book.getBookName()).
-                amount(book.getAmount()).createDate(book.getCreatedDate()).
-                author(book.getAuthor()).publishDate(book.getPublishDate()).
-                publisher(book.getPublisher()).stock(book.getStock()).build();
+    public static BookDTO fromBook(BookStock bookStock){
+        return  BookDTO.builder().bookId(bookStock.getId()).bookName(bookStock.getBookName()).
+                amount(bookStock.getAmount()).createDate(bookStock.getCreatedDate()).
+                author(bookStock.getAuthor()).publishDate(bookStock.getPublishDate()).
+                publisher(bookStock.getPublisher()).stock(bookStock.getStock()).build();
 
     }
 

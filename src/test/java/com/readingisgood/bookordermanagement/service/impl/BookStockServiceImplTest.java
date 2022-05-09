@@ -4,8 +4,7 @@ import com.readingisgood.bookordermanagement.controller.request.AddBookRequest;
 import com.readingisgood.bookordermanagement.controller.request.UpdateBookAmountRequest;
 import com.readingisgood.bookordermanagement.controller.request.UpdateBookStockRequest;
 import com.readingisgood.bookordermanagement.dto.BookDTO;
-import com.readingisgood.bookordermanagement.model.Book;
-import com.readingisgood.bookordermanagement.model.Order;
+import com.readingisgood.bookordermanagement.model.BookStock;
 import com.readingisgood.bookordermanagement.repository.BookRepository;
 import com.readingisgood.bookordermanagement.service.SequenceGeneratorService;
 import org.junit.jupiter.api.Test;
@@ -13,14 +12,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +28,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-class BookServiceImplTest {
+class BookStockServiceImplTest {
 
     @InjectMocks
     private BookServiceImpl bookService;
@@ -46,7 +43,7 @@ class BookServiceImplTest {
     @Test
     void addBook() {
 
-        String bookName = "Book";
+        String bookName = "BookStock";
         String author = "Author";
         String publisher = "Publisher";
         Date publishDate = Date.from(Instant.now());
@@ -55,7 +52,7 @@ class BookServiceImplTest {
 
         AddBookRequest request = new AddBookRequest(bookName,author,publishDate, publisher, stock, amount);
 
-        Book book = Book.builder()
+        BookStock bookStock = BookStock.builder()
                 .bookName(bookName).author(author)
                 .publishDate(publishDate).stock(stock)
                 .amount(amount).publisher(publisher)
@@ -64,12 +61,12 @@ class BookServiceImplTest {
         when(bookRepository.findByAuthorAndPublisherAndBookName(author,publisher,bookName))
                 .thenReturn(Optional.empty());
 
-        when(bookRepository.save(Mockito.any(Book.class))).thenReturn(book);
+        when(bookRepository.save(Mockito.any(BookStock.class))).thenReturn(bookStock);
         BookDTO bookDto = bookService.addBook(request);
 
         assertNotNull(bookDto);
-        assertEquals(bookDto.getBookName(), book.getBookName());
-        assertEquals(bookDto.getAmount(), book.getAmount());
+        assertEquals(bookDto.getBookName(), bookStock.getBookName());
+        assertEquals(bookDto.getAmount(), bookStock.getAmount());
 
 
     }
@@ -79,18 +76,18 @@ class BookServiceImplTest {
 
         Long bookId = 100L;
         Integer existingStock = 1;
-        String bookName = "Book";
+        String bookName = "BookStock";
         String author = "Author";
         String publisher = "Publisher";
         Date publishDate = Date.from(Instant.now());
         Integer newStock = 50;
         Double amount = 19.99;
 
-        Book book = Book.builder().stock(1).build();
-        Book updatedBook = Book.builder().stock(newStock+existingStock).build();
+        BookStock bookStock = BookStock.builder().stock(1).build();
+        BookStock updatedBookStock = BookStock.builder().stock(newStock+existingStock).build();
 
-        when(bookRepository.findByAuthorAndPublisherAndBookName(author,publisher,bookName)).thenReturn(Optional.of(book));
-        when(bookRepository.save(Mockito.any(Book.class))).thenReturn(updatedBook);
+        when(bookRepository.findByAuthorAndPublisherAndBookName(author,publisher,bookName)).thenReturn(Optional.of(bookStock));
+        when(bookRepository.save(Mockito.any(BookStock.class))).thenReturn(updatedBookStock);
 
         AddBookRequest request = new AddBookRequest(bookName,author,publishDate, publisher, newStock, amount);
 
@@ -107,7 +104,7 @@ class BookServiceImplTest {
 
         Long bookId = 1L;
 
-        when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(new Book()));
+        when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(new BookStock()));
 
         Boolean status = bookService.deleteBook(bookId);
 
@@ -122,14 +119,14 @@ class BookServiceImplTest {
         Long bookId = 5L;
         Integer stock = 100;
 
-        Book book = Book.builder().id(bookId).stock(stock).build();
+        BookStock bookStock = BookStock.builder().id(bookId).stock(stock).build();
 
-        when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(book));
+        when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(bookStock));
 
-        Book dbBook = bookService.getBookFromStock(5L,10);
+        BookStock dbBookStock = bookService.getBookFromStock(5L,10);
 
-        assertNotNull(dbBook);
-        assertEquals(dbBook.getId(),bookId);
+        assertNotNull(dbBookStock);
+        assertEquals(dbBookStock.getId(),bookId);
     }
 
     @Test
@@ -138,13 +135,13 @@ class BookServiceImplTest {
         Long bookId = 5L;
         Integer stock = 100;
 
-        Book book = Book.builder().id(bookId).stock(stock).build();
+        BookStock bookStock = BookStock.builder().id(bookId).stock(stock).build();
 
-        when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(book));
+        when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(bookStock));
 
-        Book dbBook = bookService.getBookFromStock(5L,101);
+        BookStock dbBookStock = bookService.getBookFromStock(5L,101);
 
-        assertNull(dbBook);
+        assertNull(dbBookStock);
     }
 
     @Test
@@ -153,13 +150,13 @@ class BookServiceImplTest {
         Long bookId = 5L;
         Integer stock = 100;
 
-        Book book = Book.builder().id(bookId).stock(stock).build();
+        BookStock bookStock = BookStock.builder().id(bookId).stock(stock).build();
 
         when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.empty());
 
-        Book dbBook = bookService.getBookFromStock(5L,101);
+        BookStock dbBookStock = bookService.getBookFromStock(5L,101);
 
-        assertNull(dbBook);
+        assertNull(dbBookStock);
     }
 
     @Test
@@ -168,11 +165,11 @@ class BookServiceImplTest {
         Long bookId = 100L;
         Integer newStock = 20;
 
-        Book book = Book.builder().stock(1).build();
-        Book updatedBook = Book.builder().stock(newStock).build();
+        BookStock bookStock = BookStock.builder().stock(1).build();
+        BookStock updatedBookStock = BookStock.builder().stock(newStock).build();
 
-        when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(book));
-        when(bookRepository.save(Mockito.any(Book.class))).thenReturn(updatedBook);
+        when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(bookStock));
+        when(bookRepository.save(Mockito.any(BookStock.class))).thenReturn(updatedBookStock);
 
         UpdateBookStockRequest updateBookStockRequest = new UpdateBookStockRequest(bookId,newStock);
 
@@ -187,27 +184,27 @@ class BookServiceImplTest {
 
         Double newAmount = 10.0;
 
-        Book book = Book.builder().stock(1).build();
-        Book updatedBook = Book.builder().amount(newAmount).build();
+        BookStock bookStock = BookStock.builder().stock(1).build();
+        BookStock updatedBookStock = BookStock.builder().amount(newAmount).build();
 
-        when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(book));
-        when(bookRepository.save(Mockito.any(Book.class))).thenReturn(updatedBook);
+        when(bookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(bookStock));
+        when(bookRepository.save(Mockito.any(BookStock.class))).thenReturn(updatedBookStock);
 
         UpdateBookAmountRequest updateBookAmountRequest = new UpdateBookAmountRequest(1L,10.0);
 
         BookDTO bookDto = bookService.updateBookAmount(updateBookAmountRequest);
 
         assertNotNull(bookDto);
-        assertEquals(updatedBook.getAmount(), bookDto.getAmount());
+        assertEquals(updatedBookStock.getAmount(), bookDto.getAmount());
     }
 
 
     @Test
     void getBooks() {
 
-        Book book = Book.builder().bookName("necati").id(5L).stock(100).author("HAsim").build();
-        List<Book> bookList = Arrays.asList(book);
-        Page<Book> books = new PageImpl<Book>(bookList);
+        BookStock bookStock = BookStock.builder().bookName("necati").id(5L).stock(100).author("HAsim").build();
+        List<BookStock> bookStockList = Arrays.asList(bookStock);
+        Page<BookStock> books = new PageImpl<BookStock>(bookStockList);
         when(bookRepository.findAll(Pageable.ofSize(5))).thenReturn(books);
         List<BookDTO> bookPage = bookService.getBooks(Pageable.ofSize(5));
         assertNotNull(bookPage);

@@ -4,7 +4,7 @@ import com.readingisgood.bookordermanagement.controller.request.AddBookRequest;
 import com.readingisgood.bookordermanagement.controller.request.UpdateBookAmountRequest;
 import com.readingisgood.bookordermanagement.controller.request.UpdateBookStockRequest;
 import com.readingisgood.bookordermanagement.dto.BookDTO;
-import com.readingisgood.bookordermanagement.model.Book;
+import com.readingisgood.bookordermanagement.model.BookStock;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -16,8 +16,8 @@ public interface BookService {
     public BookDTO updateBookStock(UpdateBookStockRequest updateBookRequest);
     public BookDTO updateBookAmount(UpdateBookAmountRequest updateBookPriceRequest);
     public List<BookDTO> getBooks(Pageable pageable);
-    public Book findBookById(Long bookId);
-    public Book getBookFromStock(Long bookId, int stock);
-    public void saveBooks(List<Book> bookList);
+    public BookStock findBookById(Long bookId);
+    public BookStock getBookFromStock(Long bookId, int stock);
+    public void saveBooks(List<BookStock> bookStockList);
 
 }

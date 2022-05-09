@@ -25,6 +25,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO createCustomer(CreateCustomerRequest createCustomerRequest){
 
+        log.info("Create customer request received :{}",createCustomerRequest.toString());
+
         if(customerRepository.findByEmail(createCustomerRequest.getEmail()).isPresent()){
             log.info("Existing Customer for Email={}",createCustomerRequest.getEmail());
             return null;
@@ -33,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = Customer.builder().id(sequenceGeneratorService.generateSequence(Customer.SEQUENCE_NAME)).
                 name(createCustomerRequest.getName()).email(createCustomerRequest.getEmail()).gsm(createCustomerRequest.getGsm())
                 .surname(createCustomerRequest.getSurname()).address(createCustomerRequest.getAddress()).createdDate(Date.from(Instant.now())).build();
-        log.info("Success Create");
+        log.info("Success Create customer");
 
         customerRepository.save(customer);
         return CustomerDTO.fromCustomer(customer);
